@@ -1,0 +1,4 @@
+gunicorn
+waitress
+xgboost
+bentoml==1.1.1
