@@ -1,17 +1,15 @@
 FROM python:3.9.18-slim
 
-ENV PYTHONUNBUFFERED=TRUE
-
-RUN pip --no-cache-dir install pipenv
+RUN pip install pipenv
 
 WORKDIR /app
 
 COPY ["Pipfile", "Pipfile.lock", "./"]
-RUN pipenv install --deploy --system && \
-    rm -rf /root/.cache
 
-COPY ["*.py", "churn-model.bin", "./"]
+RUN pipenv install --system --deploy
+
+COPY ["predict.py", "model_C=1.0.bin", "./"]
 
 EXPOSE 9696
 
-ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:9696", "churn_serving:app"] 
+ENTRYPOINT ["gunicorn", "--bind=0.0.0.0:9696", "predict:app"]
